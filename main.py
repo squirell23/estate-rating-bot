@@ -20,9 +20,7 @@ from aiogram.types import (
 from aiogram.filters import Command
 from aiogram.client.default import DefaultBotProperties
 
-########################################
 # ПАРАМЕТРЫ
-########################################
 API_TOKEN = ''
 DB_HOST = ''
 DB_NAME = ''
@@ -31,20 +29,18 @@ DB_PASSWORD = ''
 
 logging.basicConfig(level=logging.INFO)
 
-# Создаём бота с параметрами по умолчанию (aiogram 3.x)
+# Создаём бота
 bot = Bot(
     token=API_TOKEN,
     default=DefaultBotProperties(parse_mode=ParseMode.MARKDOWN)
 )
 
-# Создаём диспетчер и роутер (aiogram 3.x)
+# Создаём диспетчер и роутер
 router = Router()
 dp = Dispatcher(bot=bot)
 dp.include_router(router)
 
-########################################
 # Хранилище последних 5 запросов на пользователя
-########################################
 user_queries = {}  # user_id -> list[(lat, lon, radius, address)]
 
 def add_user_query(user_id: int, lat: float, lon: float, radius: float, address: str):
@@ -54,9 +50,7 @@ def add_user_query(user_id: int, lat: float, lon: float, radius: float, address:
     if len(user_queries[user_id]) > 5:
         user_queries[user_id].pop()
 
-########################################
 # Подключение к БД
-########################################
 def get_db_connection():
     return psycopg2.connect(
         host=DB_HOST,
@@ -65,9 +59,7 @@ def get_db_connection():
         password=DB_PASSWORD
     )
 
-########################################
 # Запрос информации о доме (включает дополнительные статистические данные)
-########################################
 def query_building_info(lat: float, lon: float, radius: float):
     if radius <= 0:
         radius = 1000
@@ -179,9 +171,8 @@ def generate_comparison_plot(res1, res2, addr1, addr2):
     plt.savefig(fname)
     plt.close()
     return fname
-########################################
+    
 # Геокодинг адреса через Nominatim
-########################################
 async def geocode_address(addr: str):
     url = f"https://nominatim.openstreetmap.org/search?format=json&q={addr}"
     async with aiohttp.ClientSession() as session:
@@ -195,9 +186,7 @@ async def geocode_address(addr: str):
             lon = float(data[0]['lon'])
             return lat, lon
 
-########################################
 # Основная клавиатура
-########################################
 def main_menu_kb() -> ReplyKeyboardMarkup:
     kb = [
         [KeyboardButton(text="Ввести координаты"), KeyboardButton(text="Ввести адрес")],
@@ -208,9 +197,7 @@ def main_menu_kb() -> ReplyKeyboardMarkup:
     ]
     return ReplyKeyboardMarkup(keyboard=kb, resize_keyboard=True)
 
-########################################
-# Хендлеры aiogram 3.x (через router)
-########################################
+# Хендлеры (через router)
 
 @router.message(Command("start"))
 async def cmd_start(message: Message):
@@ -627,10 +614,7 @@ async def send_comparison_text(message: Message, res1, res2):
     ]
     await message.answer("\n".join(lines), parse_mode=ParseMode.MARKDOWN)
 
-
-############################################################
 # Запуск
-############################################################
 
 async def main():
     await dp.start_polling(bot)
