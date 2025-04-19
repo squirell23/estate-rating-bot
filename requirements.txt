@@ -1,0 +1,6 @@
+aiogram>=3.0
+aiohttp
+psycopg2-binary
+matplotlib
+numpy
+python-dotenv
