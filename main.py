@@ -23,11 +23,11 @@ from aiogram.client.default import DefaultBotProperties
 ########################################
 # ПАРАМЕТРЫ
 ########################################
-API_TOKEN = 'твой_API_токен'
-DB_HOST = 'твой_хост'
-DB_NAME = 'название_базы'
-DB_USER = 'пользователь_базы'
-DB_PASSWORD = 'пароль_базы'
+API_TOKEN = ''
+DB_HOST = ''
+DB_NAME = ''
+DB_USER = ''
+DB_PASSWORD = ''
 
 logging.basicConfig(level=logging.INFO)
 
