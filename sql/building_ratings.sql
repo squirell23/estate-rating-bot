@@ -39,7 +39,7 @@ parks AS (
   JOIN park p ON ST_DWithin(b.geog, p.geog, 1000)
   GROUP BY b.building_id
 ),
--- Диверсификация инфраструктуры
+  
 diversity AS (
   SELECT b.building_id,
     CASE 
